@@ -43,14 +43,13 @@ class Set
     private $points;
 
     /**
-     * @ORM\OneToMany(targetEntity=Match::class, mappedBy="sets")
+     * @ORM\ManyToOne(targetEntity=Match::class, inversedBy="sets")
      */
     private $matchs;
 
     public function __construct()
     {
         $this->points = new ArrayCollection();
-        $this->matchs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,33 +124,14 @@ class Set
         return $this;
     }
 
-    /**
-     * @return Collection|Match[]
-     */
-    public function getMatchs(): Collection
+    public function getMatchs(): ?Match
     {
         return $this->matchs;
     }
 
-    public function addMatch(Match $match): self
+    public function setMatchs(?Match $matchs): self
     {
-        if (!$this->matchs->contains($match)) {
-            $this->matchs[] = $match;
-            $match->setSets($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMatch(Match $match): self
-    {
-        if ($this->matchs->contains($match)) {
-            $this->matchs->removeElement($match);
-            // set the owning side to null (unless already changed)
-            if ($match->getSets() === $this) {
-                $match->setSets(null);
-            }
-        }
+        $this->matchs = $matchs;
 
         return $this;
     }

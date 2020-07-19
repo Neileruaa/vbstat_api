@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\MatchRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -33,11 +35,6 @@ class Match
     private $salle;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Set::class, inversedBy="matchs")
-     */
-    private $sets;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $scoreA;
@@ -58,6 +55,16 @@ class Match
      * @ORM\JoinColumn(nullable=false)
      */
     private $equipeB;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Set::class, mappedBy="matchs")
+     */
+    private $sets;
+
+    public function __construct()
+    {
+        $this->sets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -84,18 +91,6 @@ class Match
     public function setSalle(?Salle $salle): self
     {
         $this->salle = $salle;
-
-        return $this;
-    }
-
-    public function getSets(): ?Set
-    {
-        return $this->sets;
-    }
-
-    public function setSets(?Set $sets): self
-    {
-        $this->sets = $sets;
 
         return $this;
     }
@@ -144,6 +139,37 @@ class Match
     public function setEquipeB(?Equipe $equipeB): self
     {
         $this->equipeB = $equipeB;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Set[]
+     */
+    public function getSets(): Collection
+    {
+        return $this->sets;
+    }
+
+    public function addSet(Set $set): self
+    {
+        if (!$this->sets->contains($set)) {
+            $this->sets[] = $set;
+            $set->setMatchs($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSet(Set $set): self
+    {
+        if ($this->sets->contains($set)) {
+            $this->sets->removeElement($set);
+            // set the owning side to null (unless already changed)
+            if ($set->getMatchs() === $this) {
+                $set->setMatchs(null);
+            }
+        }
 
         return $this;
     }
