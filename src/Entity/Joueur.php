@@ -51,6 +51,11 @@ class Joueur
      */
     private $points;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Equipe::class, inversedBy="joueurs")
+     */
+    private $equipe;
+
     public function __construct()
     {
         $this->points = new ArrayCollection();
@@ -148,6 +153,18 @@ class Joueur
                 $point->setJoueur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEquipe(): ?Equipe
+    {
+        return $this->equipe;
+    }
+
+    public function setEquipe(?Equipe $equipe): self
+    {
+        $this->equipe = $equipe;
 
         return $this;
     }

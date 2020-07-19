@@ -31,9 +31,15 @@ class Equipe
      */
     private $entraineurs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Joueur::class, mappedBy="equipe")
+     */
+    private $joueurs;
+
     public function __construct()
     {
         $this->entraineurs = new ArrayCollection();
+        $this->joueurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,6 +82,37 @@ class Equipe
         if ($this->entraineurs->contains($entraineur)) {
             $this->entraineurs->removeElement($entraineur);
             $entraineur->removeEquipe($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Joueur[]
+     */
+    public function getJoueurs(): Collection
+    {
+        return $this->joueurs;
+    }
+
+    public function addJoueur(Joueur $joueur): self
+    {
+        if (!$this->joueurs->contains($joueur)) {
+            $this->joueurs[] = $joueur;
+            $joueur->setEquipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJoueur(Joueur $joueur): self
+    {
+        if ($this->joueurs->contains($joueur)) {
+            $this->joueurs->removeElement($joueur);
+            // set the owning side to null (unless already changed)
+            if ($joueur->getEquipe() === $this) {
+                $joueur->setEquipe(null);
+            }
         }
 
         return $this;
