@@ -7,11 +7,15 @@ use App\Repository\SetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SetRepository::class)
  * @ORM\Table(name="`set`")
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"set:read"}},
+ *     denormalizationContext={"groups"={"set:write"}}
+ * )
  */
 class Set
 {
@@ -24,26 +28,31 @@ class Set
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"set:read", "set:write"})
      */
     private $numero;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"set:read", "set:write"})
      */
     private $scoreA;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"set:read", "set:write"})
      */
     private $scoreB;
 
     /**
-     * @ORM\OneToMany(targetEntity=Point::class, mappedBy="sets")
+     * @ORM\OneToMany(targetEntity=Point::class, mappedBy="sets", cascade={"persist"})
+     * @Groups({"set:read", "set:write"})
      */
     private $points;
 
     /**
      * @ORM\ManyToOne(targetEntity=Match::class, inversedBy="sets")
+     * @Groups({"set:write"})
      */
     private $matchs;
 

@@ -5,10 +5,14 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PointRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PointRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"point:read"}},
+ *     denormalizationContext={"groups"={"point:write"}}
+ * )
  */
 class Point
 {
@@ -21,6 +25,7 @@ class Point
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"point:read", "point:write", "set:read", "set:write"})
      */
     private $type;
 
@@ -31,6 +36,7 @@ class Point
 
     /**
      * @ORM\ManyToOne(targetEntity=Joueur::class, inversedBy="points")
+     * @Groups({"point:read", "point:write", "set:read", "set:write"})
      */
     private $joueur;
 
