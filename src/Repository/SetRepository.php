@@ -19,6 +19,17 @@ class SetRepository extends ServiceEntityRepository
         parent::__construct($registry, Set::class);
     }
 
+
+    public function findNumberSetByMatch(int $matchId) {
+        return $this->createQueryBuilder('s')
+            ->select('MAX(s.numero) AS max_set')
+            ->join('s.matchs', 'm')
+            ->where('m.id = :matchId')
+            ->setParameter('matchId', $matchId)
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
     // /**
     //  * @return Set[] Returns an array of Set objects
     //  */

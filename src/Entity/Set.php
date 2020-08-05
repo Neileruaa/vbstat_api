@@ -28,7 +28,7 @@ class Set
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"set:read", "set:write"})
+     * @Groups({"set:read"})
      */
     private $numero;
 
