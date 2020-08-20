@@ -12,7 +12,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=MatchRepository::class)
  * @ORM\Table(name="`match`")
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"match:read"}},
+ *     denormalizationContext={"groups"={"match:write"}}
+ * )
  */
 class Match
 {
@@ -26,33 +29,39 @@ class Match
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"match:read", "match:write"})
      */
     private $date;
 
     /**
      * @ORM\ManyToOne(targetEntity=Salle::class, inversedBy="matches")
+     * @Groups({"match:read", "match:write"})
      */
     private $salle;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"match:read", "match:write"})
      */
     private $scoreA;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"match:read", "match:write"})
      */
     private $scoreB;
 
     /**
      * @ORM\ManyToOne(targetEntity=Equipe::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"match:read", "match:write"})
      */
     private $equipeA;
 
     /**
      * @ORM\ManyToOne(targetEntity=Equipe::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"match:read", "match:write"})
      */
     private $equipeB;
 

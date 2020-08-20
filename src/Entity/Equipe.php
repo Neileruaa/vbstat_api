@@ -27,7 +27,7 @@ class Equipe
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:equipe"})
+     * @Groups({"read:equipe", "match:read"})
      */
     private $nom;
 

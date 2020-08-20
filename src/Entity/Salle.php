@@ -7,6 +7,8 @@ use App\Repository\SalleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass=SalleRepository::class)
@@ -23,6 +25,7 @@ class Salle
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"match:read"})
      */
     private $nom;
 
